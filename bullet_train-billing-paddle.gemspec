@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 6.0.0"
   spec.add_dependency "bullet_train-billing"
+  spec.add_dependency "paddle_pay"
 
   spec.add_development_dependency "standard"
 end
