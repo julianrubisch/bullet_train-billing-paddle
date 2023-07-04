@@ -9,3 +9,7 @@ module BulletTrain
     end
   end
 end
+
+def paddle_billing_enabled?
+  ENV["PADDLE_VENDOR_ID"].present? && ENV["PADDLE_VENDOR_AUTH_CODE"].present?
+end
