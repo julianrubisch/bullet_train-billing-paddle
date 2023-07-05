@@ -27,23 +27,28 @@ namespace :billing do
 
           # first check whether the product already exists.
           paddle_subscription_plans = PaddlePay::Subscription::Plan.list
+          price_adapter = Billing::Paddle::PriceAdapter.new(price)
 
-          if paddle_subscription_plans.find { _1[:name] == name }
+          if (paddle_subscription_plan = paddle_subscription_plans.find { _1[:name] == name })
             puts "Verified `#{name}` exists as a subscription plan on Paddle.".yellow
-            next
+          else
+            paddle_subscription_plan = PaddlePay::Subscription::Plan.create(
+              plan_name: name,
+              plan_trial_days: price.trial_days,
+              plan_length: price.duration,
+              plan_type: price.interval,
+              main_currency_code: price.currency,
+              recurring_price_usd: price.amount.to_f / 100
+            )
+
+            # if it doesn't already exist, create it.
+            if paddle_subscription_plan[:product_id].present?
+              paddle_subscription_plan[:id] = paddle_subscription_plan[:product_id]
+              puts "Created subscription plan with ID `#{paddle_subscription_plan[:product_id]}`.".green
+            end
           end
 
-          response_create = PaddlePay::Subscription::Plan.create(
-            plan_name: name,
-            plan_trial_days: price.trial_days,
-            plan_length: price.duration,
-            plan_type: price.interval,
-            main_currency_code: price.currency,
-            recurring_price_usd: price.amount.to_f / 100
-          )
-
-          # if it doesn't already exist, create it.
-          puts "Created subscription plan with ID `#{response_create[:product_id]}`.".green if response_create[:product_id].present?
+          results[price_adapter.env_key] = paddle_subscription_plan[:id]
         end
       end
 
