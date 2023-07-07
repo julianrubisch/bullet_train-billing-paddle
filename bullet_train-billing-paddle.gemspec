@@ -18,9 +18,10 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   end
 
-  spec.add_dependency "rails", ">= 6.0.0"
   spec.add_dependency "bullet_train-billing"
   spec.add_dependency "paddle_pay"
+  spec.add_dependency "php-serialize"
+  spec.add_dependency "rails", ">= 6.0.0"
 
   spec.add_development_dependency "standard"
 end
