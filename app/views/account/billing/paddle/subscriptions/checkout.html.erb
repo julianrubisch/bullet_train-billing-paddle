@@ -1,0 +1,11 @@
+<script type="text/javascript">
+ Paddle.Checkout.open({
+   product: "<%= @subscription.paddle_items.first[:plan] %>",
+   quantity: "<%= @subscription.paddle_items.first[:quantity] %>",
+   email: "<%= current_membership.email %>",
+   theme: "none",
+   passthrough: '<%= raw({"subscription_id" => @subscription.id}.to_json) %>',
+   success: "<%= account_team_billing_subscriptions_url(current_team) %>",
+   cancel: "<%= url_for([:account, @subscription.generic_subscription]) %>"
+ });
+</script>
