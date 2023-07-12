@@ -1,0 +1,17 @@
+en:
+  billing/paddle/subscriptions: &subscriptions
+    fields:
+      paddle_subscription_id:
+        _: &paddle_subscription_id Paddle Subscription ID
+        label: *paddle_subscription_id
+        heading: *paddle_subscription_id
+    notifications:
+      refreshed: Subscription was successfully updated!
+  account:
+    billing:
+      paddle:
+        subscriptions: *subscriptions
+  activerecord:
+    attributes:
+      billing/paddle/subscription:
+        paddle_subscription_id: *paddle_subscription_id

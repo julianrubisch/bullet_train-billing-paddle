@@ -5,7 +5,7 @@
    email: "<%= current_membership.email %>",
    theme: "none",
    passthrough: '<%= raw({"subscription_id" => @subscription.id}.to_json) %>',
-   success: "<%= account_team_billing_subscriptions_url(current_team) %>",
+   success: "<%= url_for([:refresh, :account, @subscription]) %>",
    cancel: "<%= url_for([:account, @subscription.generic_subscription]) %>"
  });
 </script>
