@@ -13,6 +13,7 @@ Rails.application.routes.draw do
             namespace :paddle do
               resources :subscriptions do
                 member do
+                  delete :cancel
                   post :checkout
                   get :checkout
                   get :portal

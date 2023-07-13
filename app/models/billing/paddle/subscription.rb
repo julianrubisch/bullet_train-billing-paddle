@@ -14,8 +14,4 @@ class Billing::Paddle::Subscription < ApplicationRecord
   def paddle_update_url
     PaddlePay::Subscription::User.list({subscription_id: paddle_subscription_id}).first[:update_url]
   end
-
-  def paddle_cancel_url
-    PaddlePay::Subscription::User.list({subscription_id: paddle_subscription_id}).first[:cancel_url]
-  end
 end

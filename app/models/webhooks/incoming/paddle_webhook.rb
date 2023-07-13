@@ -13,9 +13,7 @@ class Webhooks::Incoming::PaddleWebhook < ApplicationRecord
         "active"
       when "past_due"
         "overdue"
-      when "unpaid"
-        "overdue"
-      when "canceled"
+      when "deleted"
         "canceled"
       end
 
