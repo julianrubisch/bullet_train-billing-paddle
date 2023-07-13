@@ -2,8 +2,9 @@
   <%= button_to "Complete Purchase", [:checkout, :account, subscription.provider_subscription], method: :post, data: {turbo: 'false'}, class: "button button-smaller" %>
   <%= button_to "Cancel", [:account, subscription], method: :delete, data: {turbo: 'false'}, class: "button-secondary button-smaller" %>
 <% elsif subscription.active? %>
-  <%= button_to "History", [:portal, :account, subscription.provider_subscription], method: :post, data: {turbo: 'false'}, class: "button-secondary button-smaller" %>
-  <%= button_to "Manage", [:portal, :account, subscription.provider_subscription], method: :post, data: {turbo: 'false'}, class: "button button-smaller" %>
+  <%= link_to "Update Payment Details", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller", target: "_blank" %>
+  <%#= link_to "History", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller" %>
+  <%= link_to "Manage", [:portal, :account, subscription.provider_subscription], class: "button button-smaller" %>
 <% else %>
-  <%= button_to "History", [:portal, :account, subscription.provider_subscription], method: :post, data: {turbo: 'false'}, class: "button-secondary button-smaller" %>
+  <%#= link_to "History", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller" %>
 <% end %>

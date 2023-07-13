@@ -8,6 +8,14 @@ class Account::Billing::Paddle::SubscriptionsController < Account::ApplicationCo
   def checkout
   end
 
+  # GET /account/billing/paddle/subscriptions/:id/portal
+  # GET /account/billing/paddle/subscriptions/:id/portal.json
+  def portal
+    redirect_to @subscription.paddle_update_url, allow_other_host: true
+  end
+
+  # GET /account/billing/paddle/subscriptions/:id/refresh
+  # GET /account/billing/paddle/subscriptions/:id/refresh.json
   def refresh
     # could be done akin to Stripe with https://developer.paddle.com/api-reference/89c1805d821c2-list-transactions, but we have no access to the checkout_id here
     # so we're just redirecting with a notice

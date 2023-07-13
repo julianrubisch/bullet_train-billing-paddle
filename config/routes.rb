@@ -15,7 +15,7 @@ Rails.application.routes.draw do
                 member do
                   post :checkout
                   get :checkout
-                  post :portal
+                  get :portal
                   get :refresh
                 end
               end
