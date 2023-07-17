@@ -5,7 +5,7 @@
   <%= link_to "Update Payment Details", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller", target: "_blank" %>
   <%= button_to "Cancel Subscription", [:cancel, :account, subscription.provider_subscription], method: :delete, data: {turbo: false, confirm: "Are you sure?"}, class: "button-secondary button-smaller" %>
   <%#= link_to "History", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller" %>
-  <%= link_to "Manage", [:portal, :account, subscription.provider_subscription], class: "button button-smaller" %>
+  <%= link_to "Manage", edit_account_billing_subscription_path(subscription), class: "button button-smaller" %>
 <% else %>
   <%#= link_to "History", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller" %>
 <% end %>
