@@ -34,7 +34,7 @@ namespace :billing do
           else
             paddle_subscription_plan = PaddlePay::Subscription::Plan.create(
               plan_name: name,
-              plan_trial_days: price.trial_days,
+              plan_trial_days: price.trial_days || 0,
               plan_length: price.duration,
               plan_type: price.interval,
               main_currency_code: price.currency,
