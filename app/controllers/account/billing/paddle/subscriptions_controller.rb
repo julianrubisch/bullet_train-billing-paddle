@@ -1,5 +1,5 @@
 class Account::Billing::Paddle::SubscriptionsController < Account::ApplicationController
-  account_load_and_authorize_resource :subscription, through: :team, through_association: :billing_paddle_subscriptions, member_actions: [:cancel, :checkout, :refresh, :portal]
+  account_load_and_authorize_resource :subscription, through: :team, through_association: :billing_paddle_subscriptions, member_actions: [:cancel, :checkout, :history, :refresh, :portal]
 
   layout "pricing"
 
@@ -13,6 +13,14 @@ class Account::Billing::Paddle::SubscriptionsController < Account::ApplicationCo
   def cancel
     PaddlePay::Subscription::User.cancel(@subscription.paddle_subscription_id)
     redirect_to [:account, @subscription.generic_subscription.team], notice: t("billing/paddle/subscriptions.notifications.canceled")
+  end
+
+  # GET /account/billing/paddle/subscriptions/:id/history
+  # GET /account/billing/paddle/subscriptions/:id/history.json
+  def history
+    @payments = PaddlePay::Subscription::Payment.list(subscription_id: @subscription.paddle_subscription_id)
+
+    render :history, layout: "account"
   end
 
   # GET /account/billing/paddle/subscriptions/:id/portal

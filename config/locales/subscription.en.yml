@@ -1,13 +1,33 @@
 en:
   billing/paddle/subscriptions: &subscriptions
-    fields:
+    label: &label Billing
+    breadcrumbs:
+      label: *label
+    fields: &fields
       paddle_subscription_id:
         _: &paddle_subscription_id Paddle Subscription ID
         label: *paddle_subscription_id
         heading: *paddle_subscription_id
+      title:
+        heading: Paddle Subscription
+      receipt_url:
+        heading: Receipt
+        label: Receipt
+      amount:
+        heading: Amount
+      status:
+        heading: Status
+        label_0: Pending
+        label_1: Paid
+      payout_date:
+        heading: Date
     notifications:
       refreshed: Subscription was successfully updated!
       canceled: Subscription was successfully canceled!
+    index:
+      fields: *fields
+    history:
+      section: Payments History
   account:
     billing:
       paddle:

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
                   delete :cancel
                   post :checkout
                   get :checkout
+                  get :history
                   get :portal
                   get :refresh
                 end

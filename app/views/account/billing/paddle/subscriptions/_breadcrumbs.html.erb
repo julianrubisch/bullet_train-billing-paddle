@@ -1,0 +1,8 @@
+<% subscription ||= @subscription %>
+<% team ||= @team || subscription&.team %>
+<%= render 'account/teams/breadcrumbs', team: team %>
+<%= render 'account/shared/breadcrumb', label: t('.label'), url: [:account, team, :reports] %>
+<% if subscription&.persisted? %>
+  <%= render 'account/shared/breadcrumb', label: subscription.label_string, url: [:account, subscription] %>
+<% end %>
+<%= render 'account/shared/breadcrumbs/actions', only_for: 'reports' %>

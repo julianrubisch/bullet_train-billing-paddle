@@ -1,0 +1,20 @@
+<% team = @team || @team %>
+<% context ||= team %>
+<% collection ||= :payments %>
+<% hide_actions ||= false %>
+<% hide_back ||= false %>
+
+<% with_attribute_settings object: payment do %>
+  <tr data-id="<%= payment[:id] %>">
+    <%= render "shared/tables/checkbox", object: payment %>
+    <td><%= payment[:id] %></td>
+    <td><%= number_to_currency(payment[:amount], precision: 2, locale: :en) %></td>
+    <td><%= link_to_if payment[:is_paid] == 1, t('.fields.receipt_url.label'), payment[:receipt_url], target: "_blank" do %>
+        Payment pending
+      <% end %>
+    </td>
+    <td><%= t(".fields.status.label_#{payment[:is_paid]}") %></td>
+    <td><%= payment[:payout_date] %></td>
+    <%# 🚅 super scaffolding will insert new fields above this line. %>
+  </tr>
+<% end %>
