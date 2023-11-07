@@ -14,41 +14,69 @@ namespace :billing do
       # e.g. [:basic, :pro].each ...
       Billing::Product.all.each do |product|
         # ensure a paddle product with the appropriate key exists.
-        paddle_product_id = "#{I18n.t("application.key")}_#{product.id}"
+        paddle_product_id = product[:paddle_id]
 
         unless product.prices.any?
-          puts "Skipping `#{paddle_product_id}` because it has no prices associated with it.".yellow
+          puts "Skipping `#{product[:id]}` because it has no prices associated with it.".yellow
           next
+        end
+
+        begin
+          name = [I18n.t("application.name"), I18n.t("billing/products.#{product.id}.name")].join(" ")
+          # first check whether the product already exists.
+          paddle_product = Paddle::Product.retrieve(id: paddle_product_id)
+          raise Paddle::Error if paddle_product.status == "archived"
+
+          puts "Verified `#{paddle_product.id}` exists as a product on Paddle.".yellow
+
+          paddle_product.name = name
+          paddle_product.save
+
+          puts "Updated name of `#{paddle_product.id}` to \"#{name}\".".green
+        rescue Paddle::Error => _
+          # if it doesn't already exist, create it.
+          paddle_product = Paddle::Product.create(
+            name: name,
+            tax_category: "standard"
+          )
+          puts "Created `#{product.id}`.".green
+          puts "Please add a `paddle_id` key to product '#{product.id}' with '#{paddle_product.id}' in your config/models/billing/products.yml".yellow
         end
 
         # e.g. [:month, :year].each do ...
         product.prices.each do |price|
-          name = [I18n.t("application.name"), I18n.t("billing/products.#{product.id}.name"), "#{price.interval}ly"].join(" ")
+          description = [I18n.t("application.name"), I18n.t("billing/products.#{product.id}.name"), "#{price.interval}ly"].join(" ")
+          paddle_prices = Paddle::Price.list(product_id: paddle_product.id, status: "active").data
 
-          # first check whether the product already exists.
-          paddle_subscription_plans = PaddlePay::Subscription::Plan.list
           price_adapter = Billing::Paddle::PriceAdapter.new(price)
 
-          if (paddle_subscription_plan = paddle_subscription_plans.find { _1[:name] == name })
-            puts "Verified `#{name}` exists as a subscription plan on Paddle.".yellow
+          if (paddle_price = paddle_prices.detect { |paddle_price| price_adapter.matches_paddle_price?(paddle_price) })
+            puts "Verified a price similar to the `#{price.id}` price exists for `#{paddle_product.id}`.".yellow
           else
-            paddle_subscription_plan = PaddlePay::Subscription::Plan.create(
-              plan_name: name,
-              plan_trial_days: price.trial_days || 0,
-              plan_length: price.duration,
-              plan_type: price.interval,
-              main_currency_code: price.currency,
-              recurring_price_usd: price.amount.to_f / 100
-            )
+            # if this product doesn't already haves a price at the appropriate interval, create it.
+            arguments = {
+              product_id: paddle_product.id,
+              description: description,
+              amount: price.amount.to_s,
+              currency: price.currency,
+              billing_cycle: {
+                interval: price.interval,
+                frequency: price.duration
+              },
+            }
 
-            # if it doesn't already exist, create it.
-            if paddle_subscription_plan[:product_id].present?
-              paddle_subscription_plan[:id] = paddle_subscription_plan[:product_id]
-              puts "Created subscription plan with ID `#{paddle_subscription_plan[:product_id]}`.".green
+            if !!price.trial_days
+              arguments[:trial_period] = {
+                interval: "day",
+                frequency: price.trial_days
+              }
             end
+
+            paddle_price = Paddle::Price.create(**arguments)
+            puts "Created `#{price.id}` as a `#{price.interval}` price for `#{paddle_product.id}`.".green
           end
 
-          results[price_adapter.env_key] = paddle_subscription_plan[:id]
+          results[price_adapter.env_key] = paddle_price.id
         end
       end
 

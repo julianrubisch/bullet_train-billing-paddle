@@ -1,6 +1,6 @@
 require "bullet_train/billing/paddle/version"
 require "bullet_train/billing/paddle/engine"
-require "paddle_pay"
+require "paddle"
 
 module BulletTrain
   module Billing
@@ -11,5 +11,5 @@ module BulletTrain
 end
 
 def paddle_billing_enabled?
-  ENV["PADDLE_VENDOR_ID"].present? && ENV["PADDLE_VENDOR_AUTH_CODE"].present?
+  ENV["PADDLE_API_KEY"].present?
 end
