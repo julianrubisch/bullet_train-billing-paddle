@@ -17,8 +17,6 @@ en:
         heading: Amount
       status:
         heading: Status
-        label_0: Pending
-        label_1: Paid
       payout_date:
         heading: Date
     notifications:

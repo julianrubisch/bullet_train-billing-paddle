@@ -1,0 +1,20 @@
+<% team = @team || @team %>
+<% context ||= team %>
+<% collection ||= :transactions %>
+<% hide_actions ||= false %>
+<% hide_back ||= false %>
+
+<% with_attribute_settings object: transaction do %>
+  <tr data-id="<%= transaction[:id] %>">
+    <%= render "shared/tables/checkbox", object: transaction %>
+    <td><%= transaction[:subscription_id] %></td>
+    <td><%= number_to_currency(transaction.payments.last&.amount.to_i / 100, precision: 2, locale: :en) %></td>
+    <td><%= link_to_if transaction[:status] == "completed", t('.fields.receipt_url.label'), Paddle::Transaction.invoice(id: transaction[:id]), target: "_blank" do %>
+        Payment pending
+      <% end %>
+    </td>
+    <td><%= transaction[:status] %></td>
+    <td><%= transaction.payments.last&.created_at %></td>
+    <%# 🚅 super scaffolding will insert new fields above this line. %>
+  </tr>
+<% end %>

@@ -18,7 +18,7 @@ class Account::Billing::Paddle::SubscriptionsController < Account::ApplicationCo
   # GET /account/billing/paddle/subscriptions/:id/history
   # GET /account/billing/paddle/subscriptions/:id/history.json
   def history
-    @payments = PaddlePay::Subscription::Payment.list(subscription_id: @subscription.paddle_subscription_id)
+    @transactions = Paddle::Transaction.list(subscription_id: @subscription.paddle_subscription_id, status: "completed,canceled,past_due").data.select { _1.payments.last.amount.to_f > 0 }
 
     render :history, layout: "account"
   end
