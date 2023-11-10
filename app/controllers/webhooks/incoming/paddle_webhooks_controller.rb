@@ -29,7 +29,7 @@ class Webhooks::Incoming::PaddleWebhooksController < Webhooks::Incoming::Webhook
     hmac = OpenSSL::HMAC.hexdigest(digest, key, data)
     verified = hmac == h1
 
-    return verify_params.as_json.transform_values { |value| String(value) } if verified
+    return verify_params.as_json if verified
 
     raise BulletTrain::Billing::Paddle::Error, "Unable to verify paddle webhook event"
   end

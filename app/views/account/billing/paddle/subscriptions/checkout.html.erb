@@ -10,8 +10,9 @@
     }],
     customer: {
       email: "<%= current_membership.email %>",
+    },
+    customData: {
+      subscription_id: "<%= @subscription.id %>"
     }
-    /* passthrough: '<%= raw({"subscription_id" => @subscription.id}.to_json) %>', */
-    /* cancel: "<%= url_for([:account, @subscription.generic_subscription]) %>" */
   });
 </script>
