@@ -7,7 +7,7 @@ class Billing::Paddle::PriceAdapter
     "PADDLE_PRODUCT_#{@price.id}_PRICE_ID".upcase
   end
 
-  def paddle_subscription_plan_id
+  def paddle_price_id
     ENV[env_key]
   end
 
