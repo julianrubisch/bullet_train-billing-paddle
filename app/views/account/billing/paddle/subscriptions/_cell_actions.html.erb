@@ -3,8 +3,7 @@
   <%= button_to "Cancel", [:account, subscription], method: :delete, data: {turbo: 'false'}, class: "button-secondary button-smaller" %>
 <% elsif subscription.active? %>
   <%= link_to "Update Payment Details", [:portal, :account, subscription.provider_subscription], class: "button-secondary button-smaller", target: "_blank" %>
-  <%= link_to "Cancel Subscription", Paddle::Subscription.retrieve(id: subscription.provider_subscription.paddle_subscription_id).management_urls.cancel, data: {turbo: false, confirm: "Are you sure?"}, class: "button-secondary button-smaller" %>
-  <%#= button_to "Cancel Subscription", [:cancel, :account, subscription.provider_subscription], method: :delete, data: {turbo: false, confirm: "Are you sure?"}, class: "button-secondary button-smaller" %>
+  <%= link_to "Cancel Subscription", [:cancel, :account, subscription.provider_subscription], target: "_blank", class: "button-secondary button-smaller" %>
   <%= link_to "History", history_account_billing_paddle_subscription_path(subscription), class: "button-secondary button-smaller" %>
   <%= link_to "Manage", edit_account_billing_subscription_path(subscription), class: "button button-smaller" %>
 <% else %>

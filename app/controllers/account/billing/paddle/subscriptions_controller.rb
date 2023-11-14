@@ -8,11 +8,10 @@ class Account::Billing::Paddle::SubscriptionsController < Account::ApplicationCo
   def checkout
   end
 
-  # DELETE /account/billing/paddle/subscriptions/:id/cancel
-  # DELETE /account/billing/paddle/subscriptions/:id/cancel.json
+  # GET /account/billing/paddle/subscriptions/:id/cancel
+  # GET /account/billing/paddle/subscriptions/:id/cancel.json
   def cancel
-    PaddlePay::Subscription::User.cancel(@subscription.paddle_subscription_id)
-    redirect_to [:account, @subscription.generic_subscription.team], notice: t("billing/paddle/subscriptions.notifications.canceled")
+    redirect_to @subscription.paddle_cancel_url, allow_other_host: true
   end
 
   # GET /account/billing/paddle/subscriptions/:id/history

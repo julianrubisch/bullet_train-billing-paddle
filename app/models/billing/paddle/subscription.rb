@@ -14,4 +14,8 @@ class Billing::Paddle::Subscription < ApplicationRecord
   def paddle_update_url
     Paddle::Subscription.retrieve(id: paddle_subscription_id).management_urls.update_payment_method
   end
+
+  def paddle_cancel_url
+    Paddle::Subscription.retrieve(id: paddle_subscription_id).management_urls.cancel
+  end
 end
