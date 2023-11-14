@@ -5,7 +5,7 @@
       successUrl: "<%= polymorphic_url([:refresh, :account, @subscription]) %>",
     },
     items: [{
-      priceId: "<%= @subscription.paddle_items.first[:plan] %>",
+      priceId: "<%= @subscription.paddle_items.first[:price_id] %>",
       quantity: <%= @subscription.paddle_items.first[:quantity] %>,
     }],
     customer: {

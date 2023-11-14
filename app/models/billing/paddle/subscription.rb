@@ -5,7 +5,7 @@ class Billing::Paddle::Subscription < ApplicationRecord
   def paddle_items
     generic_subscription.included_prices.map do |included_price|
       {
-        plan: Billing::Paddle::PriceAdapter.new(included_price.price).paddle_price_id,
+        price_id: Billing::Paddle::PriceAdapter.new(included_price.price).paddle_price_id,
         quantity: included_price.quantity
       }
     end
