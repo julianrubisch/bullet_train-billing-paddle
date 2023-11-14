@@ -12,6 +12,6 @@ class Billing::Paddle::Subscription < ApplicationRecord
   end
 
   def paddle_update_url
-    PaddlePay::Subscription::User.list({subscription_id: paddle_subscription_id}).first[:update_url]
+    Paddle::Subscription.retrieve(id: paddle_subscription_id).management_urls.update_payment_method
   end
 end

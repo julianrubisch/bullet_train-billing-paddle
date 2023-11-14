@@ -15,10 +15,8 @@ class Webhooks::Incoming::PaddleWebhook < ApplicationRecord
         subscription.update(paddle_subscription_id: paddle_subscription_id)
       end
     in {event_type: "subscription.activated"} | {event_type: "subscription.updated"}
-      subscription.generic_subscription.update(
-        status: subscription_status,
-        cycle_ends_at: Time.zone.parse(next_billed_at)
-      )
+      subscription.generic_subscription.update(status: subscription_status)
+      subscription.generic_subscription.update(cycle_ends_at: Time.zone.parse(next_billed_at)) if !!next_billed_at
     in event_type: "subscription.canceled"
       subscription.generic_subscription.update(status: "canceled")
     # TODO subscription.resumed
