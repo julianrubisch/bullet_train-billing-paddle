@@ -13,10 +13,14 @@ class Webhooks::Incoming::PaddleWebhook < ApplicationRecord
         )
         subscription.team.update(paddle_customer_id: paddle_customer_id)
         subscription.update(paddle_subscription_id: paddle_subscription_id)
+        subscription.update_included_prices(data["data"]["items"])
       end
     in {event_type: "subscription.activated"} | {event_type: "subscription.updated"}
-      subscription.generic_subscription.update(status: subscription_status)
-      subscription.generic_subscription.update(cycle_ends_at: Time.zone.parse(next_billed_at)) if !!next_billed_at
+      Billing::Paddle::Subscription.transaction do
+        subscription.generic_subscription.update(status: subscription_status)
+        subscription.generic_subscription.update(cycle_ends_at: Time.zone.parse(next_billed_at)) if !!next_billed_at
+        subscription.update_included_prices(data["data"]["items"])
+      end
     in event_type: "subscription.canceled"
       subscription.generic_subscription.update(status: "canceled")
     # TODO subscription.resumed
