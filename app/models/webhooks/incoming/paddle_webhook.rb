@@ -23,15 +23,15 @@ class Webhooks::Incoming::PaddleWebhook < ApplicationRecord
       end
     in event_type: "subscription.canceled"
       subscription.generic_subscription.update(status: "canceled")
-    # TODO subscription.resumed
+    in event_type: "subscription.paused"
+      subscription.generic_subscription.update(status: "pending")
+    in event_type: "subscription.resumed"
+      subscription.generic_subscription.update(status: "active")
     in event_type: "transaction.completed"
     in event_type: "transaction.paid"
-      # is there anything to do here? failed payments will be processed according to "Recover Settings", e.g. paused, which should be handled by the webhook
-      # Billing::Paddle::Subscription.transaction do
-      #   subscription.update(paddle_subscription_id: paddle_subscription_id)
-      # end
     in event_type: "transaction.payment_failed"
-      # is there anything to do here? failed payments will be processed according to "Recover Settings", e.g. paused, which should be handled by the webhook
+    # is there anything to do here? failed payments will be processed according to Payment Recovery, e.g. paused, which should be handled by the webhook
+    # in Paddle Billing, that's handled by Retain https://developer.paddle.com/build/retain/configure-payment-recovery-dunning#subscription-status
     end
   end
 
