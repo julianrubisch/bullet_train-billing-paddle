@@ -1,3 +1,5 @@
+require "bullet_train/billing/paddle/error"
+
 class Webhooks::Incoming::PaddleWebhooksController < Webhooks::Incoming::WebhooksController
   def create
     Webhooks::Incoming::PaddleWebhook.create(
