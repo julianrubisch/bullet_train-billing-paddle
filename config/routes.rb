@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :paddle do
+    get "payment"
+  end
+
   namespace :account do
     shallow do
       resources :teams, only: [] do
@@ -13,7 +17,7 @@ Rails.application.routes.draw do
             namespace :paddle do
               resources :subscriptions do
                 member do
-                  delete :cancel
+                  get :cancel
                   post :checkout
                   get :checkout
                   get :history

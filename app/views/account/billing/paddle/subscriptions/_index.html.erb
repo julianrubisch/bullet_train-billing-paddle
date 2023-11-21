@@ -1,21 +1,21 @@
 <% team = @team %>
 <% context ||= team %>
-<% collection ||= :payments %>
+<% collection ||= :transactions %>
 <% hide_actions ||= false %>
 <% hide_back ||= false %>
 
 <% pagy ||= nil %>
-<% pagy, payments = pagy_array(payments, page_param: :payments_page) unless pagy %>
+<% pagy, transactions = pagy_array(transactions, page_param: :transactions_page) unless pagy %>
 
 <%= render 'account/shared/box', pagy: pagy do |box| %>
   <%# box.title t(".contexts.#{context.class.name.underscore}.header") %>
   <% box.description do %>
-    <%#= t(".contexts.#{context.class.name.underscore}.description#{"_empty" unless payments.any?}") %>
-    <%#= render "shared/limits/index", model: payments.model %>
+    <%#= t(".contexts.#{context.class.name.underscore}.description#{"_empty" unless transactions.any?}") %>
+    <%#= render "shared/limits/index", model: transactions.model %>
   <% end %>
 
   <% box.table do %>
-    <% if payments.any? %>
+    <% if transactions.any? %>
       <table class="table">
         <thead>
           <tr>
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody>
-          <%= render partial: 'payment', collection: payments %>
+          <%= render partial: 'transaction', collection: transactions %>
         </tbody>
       </table>
     <% end %>
@@ -42,7 +42,7 @@
       <%# 🚅 super scaffolding will insert new bulk action model buttons above this line. %>
 
       <% unless hide_back %>
-        <%= link_to t('global.buttons.back'), [:account, context], class: "#{first_button_primary(:payment)} back" %>
+        <%= link_to t('global.buttons.back'), [:account, context], class: "#{first_button_primary(:transaction)} back" %>
       <% end %>
     <% end %>
   <% end %>

@@ -19,8 +19,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "bullet_train-billing"
-  spec.add_dependency "paddle_pay"
-  spec.add_dependency "php-serialize"
+  spec.add_dependency "paddle", "~> 2.1", ">= 2.1.1"
   spec.add_dependency "rails", ">= 6.0.0"
 
   spec.add_development_dependency "standard"

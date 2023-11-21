@@ -1,4 +1,4 @@
-require "php_serialize"
+require "bullet_train/billing/paddle/error"
 
 class Webhooks::Incoming::PaddleWebhooksController < Webhooks::Incoming::WebhooksController
   def create
@@ -16,18 +16,22 @@ class Webhooks::Incoming::PaddleWebhooksController < Webhooks::Incoming::Webhook
   private
 
   def verified_event
-    # verify paddle signature
-    data = verify_params.as_json.transform_values { |value| String(value) }
+    paddle_signature = request.headers["Paddle-Signature"]
 
-    signature = Base64.decode64(data.delete("p_signature"))
+    ts_part, h1_part = paddle_signature.split(";")
+    _, ts = ts_part.split("=")
+    _, h1 = h1_part.split("=")
 
-    data_serialized = ::PHP.serialize(data.sort_by { |key, value| key }, true)
+    signed_payload = "#{ts}:#{request.raw_post}"
 
-    digest = OpenSSL::Digest.new("SHA1")
-    pub_key = OpenSSL::PKey::RSA.new(ENV["PADDLE_PUBLIC_KEY"].strip).public_key
-    verified = pub_key.verify(digest, signature, data_serialized)
+    key = ENV["PADDLE_SECRET_KEY"]
+    data = signed_payload
+    digest = OpenSSL::Digest.new("sha256")
 
-    return data if verified
+    hmac = OpenSSL::HMAC.hexdigest(digest, key, data)
+    verified = hmac == h1
+
+    return verify_params.as_json if verified
 
     raise BulletTrain::Billing::Paddle::Error, "Unable to verify paddle webhook event"
   end
