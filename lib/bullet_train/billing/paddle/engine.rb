@@ -10,7 +10,7 @@ module BulletTrain
         end
 
         initializer "bullet_train-billing-paddle.quantity" do
-          ActiveSupport::Notifications.subscribe("memberships.provider-quantity-changed") do |name, start, finish, id, payload|
+          ActiveSupport::Notifications.subscribe("memberships.provider-subscription-quantity-changed") do |name, start, finish, id, payload|
             # updating the included price quantity is handled in the subscription.update webhook
             ::Paddle::Subscription.update(
               id: payload[:provider_subscription].paddle_subscription_id,
