@@ -14,7 +14,7 @@ module BulletTrain
             # updating the included price quantity is handled in the subscription.update webhook
             ::Paddle::Subscription.update(
               id: payload[:provider_subscription].paddle_subscription_id,
-              proration_billing_mode: :prorated_immediately,
+              proration_billing_mode: (payload[:provider_subscription].generic_subscription.status == "trialing") ? :do_not_bill : :prorated_immediately,
               items: [{
                 price_id: ::Billing::Paddle::PriceAdapter.new(payload[:included_price].price).paddle_price_id,
                 quantity: payload[:quantity]
